@@ -166,7 +166,7 @@ const suggestedProducts = computed(() => {
                   <p class="text-[11px] text-gray-700 line-clamp-1 font-medium group-hover:text-link">{{ prod.title }}</p>
                 </div>
               </div>
-              <router-link :to="`/category/${cat.name}`" class="text-sm text-link hover:text-orange-700 hover:underline mt-4">
+              <router-link :to="`/category/${cat.name}`" class="text-sm text-link hover:text-red-700 hover:underline mt-4">
                 Shop more
               </router-link>
             </div>

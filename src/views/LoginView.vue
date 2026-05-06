@@ -142,7 +142,7 @@ const handleAuth = async () => {
       </form>
 
       <p class="mt-4 text-[11px] text-gray-700 leading-tight">
-        By continuing, you agree to Astra's <span class="text-link hover:underline hover:text-orange-700 cursor-pointer">Conditions of Use</span> and <span class="text-link hover:underline hover:text-orange-700 cursor-pointer">Privacy Notice</span>.
+        By continuing, you agree to Astra's <span class="text-link hover:underline hover:text-red-700 cursor-pointer">Conditions of Use</span> and <span class="text-link hover:underline hover:text-red-700 cursor-pointer">Privacy Notice</span>.
       </p>
 
       <div class="mt-4 pt-4 border-t border-gray-200">
@@ -161,9 +161,9 @@ const handleAuth = async () => {
     <!-- Footer -->
     <div class="mt-10 py-6 border-t border-gray-100 w-full flex flex-col items-center bg-gradient-to-b from-gray-50 to-white">
       <div class="flex gap-6 text-[11px] text-link mb-2">
-        <span class="hover:underline hover:text-orange-700 cursor-pointer">Conditions of Use</span>
-        <span class="hover:underline hover:text-orange-700 cursor-pointer">Privacy Notice</span>
-        <span class="hover:underline hover:text-orange-700 cursor-pointer">Help</span>
+        <span class="hover:underline hover:text-red-700 cursor-pointer">Conditions of Use</span>
+        <span class="hover:underline hover:text-red-700 cursor-pointer">Privacy Notice</span>
+        <span class="hover:underline hover:text-red-700 cursor-pointer">Help</span>
       </div>
       <p class="text-[11px] text-gray-500">© 1996-2024, Astra.com, Inc. or its affiliates</p>
     </div>

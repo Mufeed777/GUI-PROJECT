@@ -64,9 +64,9 @@ const priceParts = (price: number) => {
   <div class="max-w-[1500px] mx-auto px-4 py-4">
     <!-- Breadcrumbs -->
     <nav class="text-xs text-gray-500 mb-4 flex items-center gap-1 overflow-x-auto whitespace-nowrap">
-      <router-link to="/" class="hover:underline hover:text-orange-700">Home</router-link>
+      <router-link to="/" class="hover:underline hover:text-red-700">Home</router-link>
       <span v-if="product">›</span>
-      <router-link v-if="product" :to="`/category/${product.category}`" class="hover:underline hover:text-orange-700 capitalize">{{ product.category }}</router-link>
+      <router-link v-if="product" :to="`/category/${product.category}`" class="hover:underline hover:text-red-700 capitalize">{{ product.category }}</router-link>
       <span v-if="product">›</span>
       <span v-if="product" class="text-gray-900 font-medium">{{ product.title }}</span>
     </nav>
@@ -89,8 +89,8 @@ const priceParts = (price: number) => {
               v-for="(img, idx) in product.images" 
               :key="idx"
               @mouseover="activeImage = idx"
-              class="aspect-square border hover:border-orange-500 rounded-sm overflow-hidden p-1 transition-all"
-              :class="activeImage === idx ? 'border-orange-500 ring-1 ring-orange-500' : 'border-gray-300'"
+              class="aspect-square border hover:border-red-500 rounded-sm overflow-hidden p-1 transition-all"
+              :class="activeImage === idx ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-300'"
             >
               <img :src="img" class="w-full h-full object-contain" />
             </button>
