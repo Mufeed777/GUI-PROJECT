@@ -5,7 +5,7 @@ import NavBar from './components/NavBar.vue'
 <template>
   <div class="min-h-screen bg-background dark:bg-background-dark text-text dark:text-text-dark transition-colors duration-300">
     <NavBar />
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main>
       <router-view />
     </main>
   </div>

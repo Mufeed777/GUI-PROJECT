@@ -77,8 +77,8 @@ const emit = defineEmits(['close'])
           </div>
           <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Shipping and taxes calculated at checkout.</p>
           <div class="mt-6">
-            <button class="w-full max-w-md mx-auto flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-blue-700 transition-colors duration-200">
-              Checkout
+            <button class="w-full max-w-md mx-auto flex justify-center items-center px-4 py-2 border border-[#FCD200] rounded-lg shadow-sm text-sm font-medium text-gray-900 bg-[#FFD814] hover:bg-[#F7CA00] transition-colors duration-200">
+              Proceed to checkout
             </button>
           </div>
           <div class="mt-6 flex justify-center text-sm text-center text-gray-500 dark:text-gray-400">

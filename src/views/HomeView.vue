@@ -3,10 +3,9 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts, fetchCategories } from '../services/api'
 import type { Product } from '../types'
-import FilterBar from '../components/FilterBar.vue'
-import ProductList from '../components/ProductList.vue'
-import ProductCard from '../components/ProductCard.vue'
+import { useSearch } from '../composables/useSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
+import ProductCard from '../components/ProductCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,33 +14,26 @@ const categories = ref<string[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 
-const searchQuery = ref('')
+const { searchQuery } = useSearch()
 const selectedCategory = ref((route.params.category as string) || '')
 const { searchHistory, addToSearchHistory } = useSearchHistory()
 
-// Watch for route changes (e.g. clicking a category link)
+const currentHero = ref(0)
+const heroBanners = [
+  { image: '/tech-banner.png', title: 'Power up your world', sub: 'The latest in tech deals' },
+  { image: '/home-banner.png', title: 'Transform your space', sub: 'Modern living at its best' }
+]
+
+// Watch for route changes
 watch(() => route.params.category, (newCategory) => {
   selectedCategory.value = (newCategory as string) || ''
 })
 
-// Update route when category is selected from dropdown
-watch(selectedCategory, (newVal) => {
-  if (newVal) {
-    router.push(`/category/${newVal}`)
-  } else if (route.name === 'category') {
-    router.push('/')
-  }
-})
-
-// Save search query to history with debounce
-let searchTimeout: any = null
-watch(searchQuery, (newVal) => {
-  if (searchTimeout) clearTimeout(searchTimeout)
-  if (newVal.trim().length >= 3) {
-    searchTimeout = setTimeout(() => {
-      addToSearchHistory(newVal)
-    }, 2000)
-  }
+// Auto-advance hero
+onMounted(() => {
+  setInterval(() => {
+    currentHero.value = (currentHero.value + 1) % heroBanners.length
+  }, 8000)
 })
 
 onMounted(async () => {
@@ -69,91 +61,183 @@ const filteredProducts = computed(() => {
   })
 })
 
+const deals = computed(() => products.value.filter(p => p.discountPercentage > 15).slice(0, 8))
+const featuredCategories = computed(() => {
+  const cats = ['smartphones', 'laptops', 'fragrances', 'skincare']
+  return cats.map(cat => ({
+    name: cat,
+    products: products.value.filter(p => p.category === cat).slice(0, 4)
+  }))
+})
+
 const suggestedProducts = computed(() => {
   if (searchHistory.value.length === 0 || searchQuery.value) return []
-  
   const suggestions: Product[] = []
   const seenIds = new Set<number>()
-  
   for (const query of searchHistory.value) {
     const matches = products.value.filter(p => 
       !seenIds.has(p.id) && 
-      (p.title.toLowerCase().includes(query) || 
-       p.category.toLowerCase().includes(query) ||
-       p.description.toLowerCase().includes(query))
+      (p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query))
     )
-    
     matches.forEach(m => {
       if (suggestions.length < 8) {
         suggestions.push(m)
         seenIds.add(m.id)
       }
     })
-    
     if (suggestions.length >= 8) break
   }
-  
   return suggestions
 })
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Our Products</h1>
-    </div>
-
-    <div v-if="loading" class="flex justify-center items-center py-20">
+  <div class="-mx-4 md:-mx-8">
+    <div v-if="loading" class="flex justify-center items-center py-20 min-h-screen">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
     </div>
 
-    <div v-else-if="error" class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center text-red-700 dark:text-red-400">
-      <p class="font-medium text-lg mb-2">Oops! Something went wrong.</p>
-      <p>{{ error }}</p>
-      <button @click="() => window.location.reload()" class="mt-4 px-4 py-2 bg-red-100 dark:bg-red-800 hover:bg-red-200 dark:hover:bg-red-700 rounded-md transition-colors">
+    <div v-else-if="error" class="max-w-4xl mx-auto mt-10 bg-white p-10 rounded-sm shadow-sm text-center">
+      <p class="font-bold text-xl mb-2 text-red-600">Oops! Something went wrong.</p>
+      <p class="text-gray-600 mb-6">{{ error }}</p>
+      <button @click="() => window.location.reload()" class="px-6 py-2 bg-primary text-gray-900 font-bold rounded-sm shadow-sm">
         Try Again
       </button>
     </div>
 
     <div v-else>
-      <FilterBar 
-        :categories="categories"
-        v-model:searchQuery="searchQuery"
-        v-model:selectedCategory="selectedCategory"
-      />
-
-      <!-- Recommendations Section -->
-      <div v-if="suggestedProducts.length > 0 && !searchQuery" class="mb-12 transition-all duration-700">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-              <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <div>
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Based on your recent searches</p>
-            </div>
+      <!-- Hero Section -->
+      <div v-if="!searchQuery && !selectedCategory" class="relative w-full h-[300px] md:h-[600px] overflow-hidden">
+        <div 
+          v-for="(banner, index) in heroBanners" 
+          :key="index"
+          class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+          :class="currentHero === index ? 'opacity-100 z-10' : 'opacity-0 z-0'"
+        >
+          <img :src="banner.image" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+          <div class="absolute top-1/4 left-10 md:left-20 max-w-lg z-20">
+            <h2 class="text-4xl md:text-6xl font-black text-white mb-2 drop-shadow-lg">{{ banner.title }}</h2>
+            <p class="text-xl md:text-2xl text-gray-100 mb-6 drop-shadow-md">{{ banner.sub }}</p>
+            <button class="bg-primary text-gray-900 font-bold px-8 py-3 rounded-sm shadow-xl hover:bg-primary-dark transition-colors">
+              Shop Now
+            </button>
           </div>
         </div>
         
-        <div class="flex gap-6 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
-          <div v-for="product in suggestedProducts" :key="product.id" class="w-72 flex-shrink-0">
-            <ProductCard :product="product" />
-          </div>
+        <!-- Hero Controls -->
+        <div class="absolute bottom-10 right-10 z-30 flex gap-2">
+          <button 
+            v-for="(_, index) in heroBanners" 
+            :key="index"
+            @click="currentHero = index"
+            class="w-3 h-3 rounded-full border-2 border-white transition-all"
+            :class="currentHero === index ? 'bg-white w-8' : 'bg-transparent'"
+          ></button>
         </div>
-        <div class="h-px bg-gray-100 dark:bg-gray-700 mt-4"></div>
-      </div>
-      
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-          {{ selectedCategory ? `${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Products` : 'All Products' }}
-        </h2>
-        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ filteredProducts.length }} items</span>
       </div>
 
-      <ProductList :products="filteredProducts" />
+      <!-- Main Content Container -->
+      <div class="max-w-[1500px] mx-auto px-4 md:px-8 -mt-10 md:-mt-48 relative z-20 pb-20">
+        
+        <!-- Search Results Header -->
+        <div v-if="searchQuery || selectedCategory" class="bg-white p-4 mb-6 shadow-sm flex items-center justify-between">
+          <h2 class="text-xl font-bold">
+            {{ searchQuery ? `Results for "${searchQuery}"` : `${selectedCategory.toUpperCase()} Products` }}
+          </h2>
+          <span class="text-sm text-gray-500">{{ filteredProducts.length }} items</span>
+        </div>
+
+        <!-- Home Page Grids (Only shown when not searching) -->
+        <template v-if="!searchQuery && !selectedCategory">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div v-for="cat in featuredCategories" :key="cat.name" class="bg-white p-5 shadow-sm flex flex-col h-full">
+              <h3 class="text-xl font-bold mb-3 capitalize">{{ cat.name }}</h3>
+              <div class="grid grid-cols-2 gap-2 flex-grow">
+                <div 
+                  v-for="prod in cat.products" 
+                  :key="prod.id" 
+                  class="cursor-pointer group"
+                  @click="router.push(`/product/${prod.id}`)"
+                >
+                  <div class="aspect-square bg-gray-50 flex items-center justify-center p-2 mb-1">
+                    <img :src="prod.thumbnail" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform" />
+                  </div>
+                  <p class="text-[11px] text-gray-700 line-clamp-1 font-medium group-hover:text-link">{{ prod.title }}</p>
+                </div>
+              </div>
+              <router-link :to="`/category/${cat.name}`" class="text-sm text-link hover:text-orange-700 hover:underline mt-4">
+                Shop more
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Recommendations Carousel -->
+          <div v-if="suggestedProducts.length > 0" class="bg-white p-6 shadow-sm mb-8">
+            <h3 class="text-xl font-bold mb-4">Inspired by your shopping trend</h3>
+            <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              <div v-for="product in suggestedProducts" :key="product.id" class="w-48 flex-shrink-0">
+                <div @click="router.push(`/product/${product.id}`)" class="cursor-pointer group">
+                  <div class="aspect-square bg-gray-50 flex items-center justify-center p-4 mb-2">
+                    <img :src="product.thumbnail" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform" />
+                  </div>
+                  <p class="text-sm text-link line-clamp-2 leading-snug mb-1 group-hover:underline">{{ product.title }}</p>
+                  <div class="flex items-center gap-1 mb-1">
+                    <div class="flex text-[#FFA41C] text-xs">
+                      <span v-for="i in 5" :key="i">{{ i <= Math.round(product.rating) ? '★' : '☆' }}</span>
+                    </div>
+                  </div>
+                  <p class="font-bold text-gray-900">${{ product.price }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Deals Carousel -->
+          <div class="bg-white p-6 shadow-sm mb-8">
+            <h3 class="text-xl font-bold mb-4">Today's Deals <span class="text-sm text-link ml-4 font-normal cursor-pointer hover:underline">See all deals</span></h3>
+            <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+              <div v-for="product in deals" :key="product.id" class="w-64 flex-shrink-0">
+                <div @click="router.push(`/product/${product.id}`)" class="cursor-pointer group">
+                  <div class="aspect-square bg-gray-100 flex items-center justify-center p-6 mb-3 rounded-sm">
+                    <img :src="product.thumbnail" class="max-h-full max-w-full object-contain" />
+                  </div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-red-700 text-white text-xs font-bold px-1.5 py-0.5 rounded-sm">Up to {{ Math.round(product.discountPercentage) }}% off</span>
+                    <span class="text-red-700 text-xs font-bold">Deal</span>
+                  </div>
+                  <p class="text-sm font-bold truncate">{{ product.title }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Product List (Grid) -->
+        <div v-if="searchQuery || selectedCategory || !loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <ProductCard 
+            v-for="product in filteredProducts" 
+            :key="product.id" 
+            :product="product" 
+          />
+        </div>
+
+        <div v-if="filteredProducts.length === 0 && !loading" class="bg-white p-20 text-center shadow-sm">
+          <p class="text-xl font-bold text-gray-400">No products found matching your criteria.</p>
+          <button @click="searchQuery = ''; selectedCategory = ''" class="mt-4 text-link hover:underline">Clear all filters</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
+

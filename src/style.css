@@ -3,12 +3,16 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
-  --color-background: #ffffff;
-  --color-text: #1f2937;
-  --color-background-dark: #111827;
-  --color-text-dark: #f9fafb;
+  --color-primary: #febd69;
+  --color-primary-dark: #f08804;
+  --color-secondary: #232f3e;
+  --color-accent: #f0c14b;
+  --color-header: #131921;
+  --color-background: #eaeded;
+  --color-text: #111111;
+  --color-background-dark: #0f1111;
+  --color-text-dark: #f3f3f3;
+  --color-link: #007185;
 }
 
 @layer base {
