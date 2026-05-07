@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 @variant dark (&:where(.dark, .dark *));
 
@@ -18,6 +19,7 @@
 @layer base {
   body {
     @apply bg-background text-text transition-colors duration-300;
+    font-family: "Poppins", sans-serif;
   }
   .dark body {
     @apply bg-background-dark text-text-dark;
