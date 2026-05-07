@@ -31,7 +31,7 @@ const cents = priceParts[1] ? (priceParts[1].length === 1 ? priceParts[1] + '0' 
     @click="goToDetail"
   >
     <!-- Image -->
-    <div class="relative bg-white dark:bg-gray-900 aspect-square flex items-center justify-center mb-3">
+    <div class="relative bg-white dark:bg-gray-900 aspect-square h-72 flex items-center justify-center mb-3">
       <img 
         :src="product.thumbnail" 
         :alt="product.title"
