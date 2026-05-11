@@ -47,7 +47,7 @@ const handleLogout = () => {
             v-model="searchQuery"
             type="text" 
             placeholder="Search Astra" 
-            class="w-full px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+            class="w-full px-4 py-2 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
           />
           <button class="bg-primary hover:bg-primary-dark p-2 px-5 rounded-r-md transition-colors flex items-center justify-center">
             <svg class="w-6 h-6 text-header" fill="none" stroke="currentColor" viewBox="0 0 24 24">
