@@ -1,0 +1,2 @@
+Changed the font to poppins
+Changed the immage size 
