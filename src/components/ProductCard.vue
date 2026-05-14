@@ -77,7 +77,7 @@ const cents = priceParts[1] ? (priceParts[1].length === 1 ? priceParts[1] + '0' 
       <div class="mt-auto pt-2">
         <button 
           @click="handleAddToCart"
-          class="w-full bg-[#FFD814] hover:bg-[#F7CA00] text-gray-900 py-1.5 px-4 rounded-full text-sm font-medium transition-colors border border-[#FCD200] shadow-sm active:bg-[#F0C14B]"
+          class="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white py-1.5 px-4 rounded-full text-sm font-medium transition-colors border border-[#16A34A] shadow-sm active:bg-[#15803D]"
         >
           Add to Cart
         </button>

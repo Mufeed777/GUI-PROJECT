@@ -164,7 +164,7 @@ const priceParts = (price: number) => {
               <button 
                 @click="handleAddToCart"
                 :disabled="product.stock === 0"
-                class="w-full bg-[#FFD814] hover:bg-[#F7CA00] text-gray-900 py-2.5 rounded-full text-sm font-medium transition-colors border border-[#FCD200] shadow-sm active:bg-[#F0C14B] disabled:opacity-50"
+                class="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white py-2.5 rounded-full text-sm font-medium transition-colors border border-[#16A34A] shadow-sm active:bg-[#15803D] disabled:opacity-50"
               >
                 Add to Cart
               </button>

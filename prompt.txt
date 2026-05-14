@@ -1,2 +1,4 @@
 Changed the font to poppins
 Changed the immage size 
+change the search bar to with recent search dropdown 
+When searching in the search bar the letters were not visible , i canged it to visible
