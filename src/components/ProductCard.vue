@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import type { Product } from '../types'
 import { useCart } from '../composables/useCart'
+import { lkrPriceParts } from '../composables/useCurrency'
 
 const props = defineProps<{
   product: Product
@@ -19,10 +20,7 @@ const handleAddToCart = (e: Event) => {
   addToCart(props.product)
 }
 
-// Split price into whole and decimals
-const priceParts = props.product.price.toString().split('.')
-const whole = priceParts[0]
-const cents = priceParts[1] ? (priceParts[1].length === 1 ? priceParts[1] + '0' : priceParts[1]) : '00'
+const { whole, cents } = lkrPriceParts(props.product.price)
 </script>
 
 <template>
@@ -57,7 +55,7 @@ const cents = priceParts[1] ? (priceParts[1].length === 1 ? priceParts[1] + '0' 
 
       <!-- Price -->
       <div class="flex items-start text-gray-900 dark:text-white mb-1">
-        <span class="text-xs font-medium mt-1 mr-0.5">$</span>
+        <span class="text-xs font-medium mt-1 mr-0.5">Rs.</span>
         <span class="text-2xl font-bold">{{ whole }}</span>
         <span class="text-xs font-medium mt-1">{{ cents }}</span>
       </div>

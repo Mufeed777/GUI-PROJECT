@@ -6,6 +6,7 @@ import type { Product } from '../types'
 import { useSearch } from '../composables/useSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import ProductCard from '../components/ProductCard.vue'
+import { formatLKR } from '../composables/useCurrency'
 
 const route = useRoute()
 const router = useRouter()
@@ -187,7 +188,7 @@ const suggestedProducts = computed(() => {
                       <span v-for="i in 5" :key="i">{{ i <= Math.round(product.rating) ? '★' : '☆' }}</span>
                     </div>
                   </div>
-                  <p class="font-bold text-gray-900">${{ product.price }}</p>
+                  <p class="font-bold text-gray-900">{{ formatLKR(product.price) }}</p>
                 </div>
               </div>
             </div>

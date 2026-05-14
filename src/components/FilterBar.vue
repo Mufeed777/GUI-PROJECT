@@ -4,6 +4,7 @@ import { ref, watch, computed } from 'vue'
 import { useRecentlyViewed } from '../composables/useRecentlyViewed'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import { useRouter } from 'vue-router'
+import { formatLKR } from '../composables/useCurrency'
 
 const props = defineProps<{
   categories: string[]
@@ -221,7 +222,7 @@ const startVoiceSearch = async () => {
               <img :src="product.thumbnail" :alt="product.title" class="w-10 h-10 object-cover rounded-lg bg-gray-100 dark:bg-gray-900" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ product.title }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">${{ product.price }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ formatLKR(product.price) }}</p>
               </div>
             </div>
           </div>

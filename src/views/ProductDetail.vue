@@ -6,6 +6,7 @@ import type { Product } from '../types'
 import { useCart } from '../composables/useCart'
 import ProductCard from '../components/ProductCard.vue'
 import { useRecentlyViewed } from '../composables/useRecentlyViewed'
+import { formatLKR, lkrPriceParts } from '../composables/useCurrency'
 
 const route = useRoute()
 const router = useRouter()
@@ -51,13 +52,7 @@ const handleAddToCart = () => {
   if (product.value) addToCart(product.value)
 }
 
-const priceParts = (price: number) => {
-  const parts = price.toString().split('.')
-  return {
-    whole: parts[0],
-    cents: parts[1] ? (parts[1].length === 1 ? parts[1] + '0' : parts[1]) : '00'
-  }
-}
+const priceParts = (price: number) => lkrPriceParts(price)
 </script>
 
 <template>
@@ -121,12 +116,12 @@ const priceParts = (price: number) => {
             <div class="flex items-baseline gap-2 mb-1">
               <span class="text-red-600 text-2xl font-light">-{{ Math.round(product.discountPercentage) }}%</span>
               <div class="flex items-start font-bold">
-                <span class="text-sm mt-1">$</span>
+                <span class="text-sm mt-1">Rs.</span>
                 <span class="text-3xl">{{ priceParts(product.price).whole }}</span>
                 <span class="text-sm mt-1">{{ priceParts(product.price).cents }}</span>
               </div>
             </div>
-            <p class="text-sm text-gray-500">Typical price: <span class="line-through">${{ (product.price * (1 + product.discountPercentage/100)).toFixed(2) }}</span></p>
+            <p class="text-sm text-gray-500">Typical price: <span class="line-through">{{ formatLKR(product.price * (1 + product.discountPercentage/100)) }}</span></p>
           </div>
 
           <div class="mb-6 border-b pb-6">
@@ -146,7 +141,7 @@ const priceParts = (price: number) => {
         <div class="lg:col-span-3">
           <div class="border border-gray-300 rounded-lg p-4 sticky top-40">
             <div class="flex items-start font-bold mb-2">
-              <span class="text-sm mt-1">$</span>
+              <span class="text-sm mt-1\">Rs.</span>
               <span class="text-3xl">{{ priceParts(product.price).whole }}</span>
               <span class="text-sm mt-1">{{ priceParts(product.price).cents }}</span>
             </div>

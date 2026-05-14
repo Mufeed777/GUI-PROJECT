@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCart } from '../composables/useCart'
+import { formatLKR } from '../composables/useCurrency'
 
 const { cart, removeFromCart, totalPrice } = useCart()
 
@@ -47,7 +48,7 @@ const emit = defineEmits(['close'])
                         <h3>
                           <router-link :to="`/product/${item.product.id}`" @click="emit('close')">{{ item.product.title }}</router-link>
                         </h3>
-                        <p class="ml-4">${{ item.product.price }}</p>
+                        <p class="ml-4">{{ formatLKR(item.product.price) }}</p>
                       </div>
                       <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 capitalize">{{ item.product.category }}</p>
                     </div>
@@ -73,7 +74,7 @@ const emit = defineEmits(['close'])
         <div class="border-t border-gray-200 dark:border-gray-700 py-6 px-4 sm:px-6">
           <div class="flex justify-between text-base font-medium text-gray-900 dark:text-white">
             <p>Subtotal</p>
-            <p>${{ totalPrice.toFixed(2) }}</p>
+            <p>{{ formatLKR(totalPrice) }}</p>
           </div>
           <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Shipping and taxes calculated at checkout.</p>
           <div class="mt-6">
