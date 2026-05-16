@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import type { Product } from '../types'
 import { useCart } from '../composables/useCart'
-import { lkrPriceParts } from '../composables/useCurrency'
+import { lkrPriceParts, formatLKR } from '../composables/useCurrency'
 
 const props = defineProps<{
   product: Product
@@ -20,7 +20,11 @@ const handleAddToCart = (e: Event) => {
   addToCart(props.product)
 }
 
-const { whole, cents } = lkrPriceParts(props.product.price)
+const DISCOUNT = 12
+const discountedUsd = props.product.price * (1 - DISCOUNT / 100)
+const { whole, cents } = lkrPriceParts(discountedUsd)
+const originalParts = lkrPriceParts(props.product.price)
+const originalFormatted = formatLKR(props.product.price)
 </script>
 
 <template>
@@ -54,10 +58,15 @@ const { whole, cents } = lkrPriceParts(props.product.price)
       </div>
 
       <!-- Price -->
-      <div class="flex items-start text-gray-900 dark:text-white mb-1">
-        <span class="text-xs font-medium mt-1 mr-0.5">Rs.</span>
-        <span class="text-2xl font-bold">{{ whole }}</span>
-        <span class="text-xs font-medium mt-1">{{ cents }}</span>
+      <div class="flex items-center justify-between text-gray-900 dark:text-white mb-1">
+        <div class="flex items-start">
+          <span class="text-xs font-medium mt-1 mr-0.5">Rs.</span>
+          <span class="text-2xl font-bold">{{ whole }}</span>
+          <span class="text-xs font-medium mt-1">{{ cents }}</span>
+          <span class="text-sm text-gray-500 dark:text-gray-400 ml-2 line-through">{{ originalFormatted }}</span>
+        </div>
+
+        <div class="text-sm font-bold text-right text-green-700">-{{ DISCOUNT }}%</div>
       </div>
 
       <!-- Badges -->

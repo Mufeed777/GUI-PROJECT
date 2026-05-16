@@ -2,3 +2,5 @@ Changed the font to poppins
 Changed the immage size 
 change the search bar to with recent search dropdown 
 When searching in the search bar the letters were not visible , i canged it to visible
+Changed the colour of Yellow Add to cart box to Green colour box 
+Convert the USD price ro SriLankan money by multiplying 311 and the Dollar mark to Rs.

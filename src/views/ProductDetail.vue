@@ -52,7 +52,9 @@ const handleAddToCart = () => {
   if (product.value) addToCart(product.value)
 }
 
+const DISCOUNT = 12
 const priceParts = (price: number) => lkrPriceParts(price)
+const discounted = (p: number) => p * (1 - DISCOUNT / 100)
 </script>
 
 <template>
@@ -114,14 +116,14 @@ const priceParts = (price: number) => lkrPriceParts(price)
 
           <div class="mb-6">
             <div class="flex items-baseline gap-2 mb-1">
-              <span class="text-red-600 text-2xl font-light">-{{ Math.round(product.discountPercentage) }}%</span>
+              <span class="text-red-600 text-2xl font-light">-{{ DISCOUNT }}%</span>
               <div class="flex items-start font-bold">
                 <span class="text-sm mt-1">Rs.</span>
-                <span class="text-3xl">{{ priceParts(product.price).whole }}</span>
-                <span class="text-sm mt-1">{{ priceParts(product.price).cents }}</span>
+                <span class="text-3xl">{{ priceParts(discounted(product.price)).whole }}</span>
+                <span class="text-sm mt-1">{{ priceParts(discounted(product.price)).cents }}</span>
               </div>
             </div>
-            <p class="text-sm text-gray-500">Typical price: <span class="line-through">{{ formatLKR(product.price * (1 + product.discountPercentage/100)) }}</span></p>
+            <p class="text-sm text-gray-500">Typical price: <span class="line-through">{{ formatLKR(product.price) }}</span></p>
           </div>
 
           <div class="mb-6 border-b pb-6">
@@ -141,9 +143,12 @@ const priceParts = (price: number) => lkrPriceParts(price)
         <div class="lg:col-span-3">
           <div class="border border-gray-300 rounded-lg p-4 sticky top-40">
             <div class="flex items-start font-bold mb-2">
-              <span class="text-sm mt-1\">Rs.</span>
-              <span class="text-3xl">{{ priceParts(product.price).whole }}</span>
-              <span class="text-sm mt-1">{{ priceParts(product.price).cents }}</span>
+              <div class="flex items-start">
+                <span class="text-sm mt-1">Rs.</span>
+                <span class="text-3xl">{{ priceParts(discounted(product.price)).whole }}</span>
+                <span class="text-sm mt-1">{{ priceParts(discounted(product.price)).cents }}</span>
+                <span class="text-sm text-gray-500 ml-3 line-through">{{ formatLKR(product.price) }}</span>
+              </div>
             </div>
             
             <p class="text-sm text-gray-900 mb-2">FREE Returns</p>
