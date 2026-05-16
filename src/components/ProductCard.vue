@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import type { Product } from '../types'
 import { useCart } from '../composables/useCart'
 import { lkrPriceParts, formatLKR } from '../composables/useCurrency'
+import { computed } from 'vue'
 
 const props = defineProps<{
   product: Product
@@ -25,6 +26,12 @@ const discountedUsd = props.product.price * (1 - DISCOUNT / 100)
 const { whole, cents } = lkrPriceParts(discountedUsd)
 const originalParts = lkrPriceParts(props.product.price)
 const originalFormatted = formatLKR(props.product.price)
+
+const COUPON_CODE = 'FREEPRIZE'
+const isFurniture = computed(() => {
+  const cat = props.product.category
+  return typeof cat === 'string' && cat.toLowerCase().includes('furn')
+})
 </script>
 
 <template>
@@ -77,6 +84,9 @@ const originalFormatted = formatLKR(props.product.price)
         </div>
         <div v-if="product.discountPercentage > 15" class="bg-red-700 text-white text-[11px] font-bold px-1.5 py-0.5 rounded-sm">
           Limited time deal
+        </div>
+        <div v-if="isFurniture" class="bg-green-100 text-green-800 text-[11px] font-bold px-1.5 py-0.5 rounded-sm">
+          Coupon: {{ COUPON_CODE }}
         </div>
       </div>
 

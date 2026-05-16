@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProductById, fetchProducts } from '../services/api'
 import type { Product } from '../types'
@@ -55,6 +55,8 @@ const handleAddToCart = () => {
 const DISCOUNT = 12
 const priceParts = (price: number) => lkrPriceParts(price)
 const discounted = (p: number) => p * (1 - DISCOUNT / 100)
+const COUPON_CODE = 'FREEPRIZE'
+const isFurniture = computed(() => product.value ? (product.value.category ?? '').toLowerCase().includes('furn') : false)
 </script>
 
 <template>
@@ -123,6 +125,10 @@ const discounted = (p: number) => p * (1 - DISCOUNT / 100)
                 <span class="text-sm mt-1">{{ priceParts(discounted(product.price)).cents }}</span>
               </div>
             </div>
+            <div v-if="isFurniture" class="mb-2">
+              <div class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-sm font-semibold text-sm">Coupon: {{ COUPON_CODE }}</div>
+              <p class="text-xs text-gray-600 mt-1">Apply this coupon at checkout for extra benefits.</p>
+            </div>
             <p class="text-sm text-gray-500">Typical price: <span class="line-through">{{ formatLKR(product.price) }}</span></p>
           </div>
 
@@ -149,6 +155,9 @@ const discounted = (p: number) => p * (1 - DISCOUNT / 100)
                 <span class="text-sm mt-1">{{ priceParts(discounted(product.price)).cents }}</span>
                 <span class="text-sm text-gray-500 ml-3 line-through">{{ formatLKR(product.price) }}</span>
               </div>
+            </div>
+            <div v-if="isFurniture" class="mt-2">
+              <p class="text-sm text-green-700 font-semibold">Use coupon <span class="font-bold">{{ COUPON_CODE }}</span> at checkout</p>
             </div>
             
             <p class="text-sm text-gray-900 mb-2">FREE Returns</p>
