@@ -116,9 +116,9 @@ const isFurniture = computed(() => product.value ? (product.value.category ?? ''
             <span class="text-sm text-link hover:underline">Search this page</span>
           </div>
 
-          <div class="mb-6">
+          <div class="mb-6 bg-black text-white p-4 rounded-md">
             <div class="flex items-baseline gap-2 mb-1">
-              <span class="text-red-600 text-2xl font-light">-{{ DISCOUNT }}%</span>
+              <span class="text-red-400 text-2xl font-light">-{{ DISCOUNT }}%</span>
               <div class="flex items-start font-bold">
                 <span class="text-sm mt-1">Rs.</span>
                 <span class="text-3xl">{{ priceParts(discounted(product.price)).whole }}</span>
@@ -127,9 +127,9 @@ const isFurniture = computed(() => product.value ? (product.value.category ?? ''
             </div>
             <div v-if="isFurniture" class="mb-2">
               <div class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-sm font-semibold text-sm">Coupon: {{ COUPON_CODE }}</div>
-              <p class="text-xs text-gray-600 mt-1">Apply this coupon at checkout for extra benefits.</p>
+              <p class="text-xs text-gray-300 mt-1">Apply this coupon at checkout for extra benefits.</p>
             </div>
-            <p class="text-sm text-gray-500">Typical price: <span class="line-through">{{ formatLKR(product.price) }}</span></p>
+            <p class="text-sm text-gray-300">Typical price: <span class="line-through text-gray-400">{{ formatLKR(product.price) }}</span></p>
           </div>
 
           <div class="mb-6 border-b pb-6">
@@ -148,12 +148,12 @@ const isFurniture = computed(() => product.value ? (product.value.category ?? ''
         <!-- Right: Checkout Box (3 cols) -->
         <div class="lg:col-span-3">
           <div class="border border-gray-300 rounded-lg p-4 sticky top-40">
-            <div class="flex items-start font-bold mb-2">
+            <div class="flex items-start font-bold mb-2 bg-black text-white p-3 rounded-sm">
               <div class="flex items-start">
                 <span class="text-sm mt-1">Rs.</span>
                 <span class="text-3xl">{{ priceParts(discounted(product.price)).whole }}</span>
                 <span class="text-sm mt-1">{{ priceParts(discounted(product.price)).cents }}</span>
-                <span class="text-sm text-gray-500 ml-3 line-through">{{ formatLKR(product.price) }}</span>
+                <span class="text-sm text-gray-400 ml-3 line-through">{{ formatLKR(product.price) }}</span>
               </div>
             </div>
             <div v-if="isFurniture" class="mt-2">
@@ -195,8 +195,8 @@ const isFurniture = computed(() => product.value ? (product.value.category ?? ''
       </div>
 
       <!-- Related Products Section -->
-      <div v-if="relatedProducts.length > 0" class="mt-20 border-t pt-10">
-        <h2 class="text-xl font-bold mb-6">Customers who viewed this item also viewed</h2>
+      <div v-if="relatedProducts.length > 0" class="mt-20 border-t pt-10 bg-black text-white p-6 rounded-md">
+        <h2 class="text-xl font-bold mb-6 text-white">Customers who viewed this item also viewed</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
           <ProductCard v-for="rel in relatedProducts" :key="rel.id" :product="rel" />
         </div>
