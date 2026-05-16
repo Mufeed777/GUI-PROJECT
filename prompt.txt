@@ -4,3 +4,7 @@ change the search bar to with recent search dropdown
 When searching in the search bar the letters were not visible , i canged it to visible
 Changed the colour of Yellow Add to cart box to Green colour box 
 Convert the USD price ro SriLankan money by multiplying 311 and the Dollar mark to Rs.
+Add 12% discount display to ProductCard and ProductDetail
+Gave the coupon for only furniture type products and Update coupon code to FREEPRIZE
+Switch global theme to dark palette
+changed the product detail price block and the "Customers who viewed this item also viewed" section to black 
